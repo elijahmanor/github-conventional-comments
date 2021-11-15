@@ -11,6 +11,16 @@
 }
 
 .GitHubConventionalComments-trigger {
+  display: flex;
+  align-items: center;
   border: none;
   background: none;
 }
+
+.GitHubConventionalComments-trigger > svg {
+  color: #768390;
+  fill: transparent;
+  width: 24px;
+  height: 24px;
+}
+

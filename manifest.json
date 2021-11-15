@@ -42,7 +42,7 @@
     }
   ],
   "web_accessible_resources": [{
-    "resources": ["images/*.png"],
+    "resources": ["images/*.svg"],
     "matches": ["https://github.com/*"]
   }]
 }
