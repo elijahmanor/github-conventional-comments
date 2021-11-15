@@ -1,0 +1,16 @@
+.GitHubConventionalComments-controls {
+  display: none;
+}
+.GitHubConventionalComments-controls select {
+}
+.GitHubConventionalComments-controls input {
+}
+.GitHubConventionalComments-controls.is-open {
+  display: flex;
+  margin: 8px;
+}
+
+.GitHubConventionalComments-trigger {
+  border: none;
+  background: none;
+}

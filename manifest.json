@@ -1,0 +1,50 @@
+{
+  "name": "GitHub Conventional Comments",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "description": "Add conventional comment suppor to GitHub pull requests",
+  "homepage_url": "https://planview.com",
+  "default_locale": "en",
+  "background": {
+    "service_worker": "src/bg/background.js"
+  },
+  "action": {
+    "default_title": "browser action demo",
+    "default_popup": "src/browser_action/browser_action.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon48.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "permissions": [
+    "storage",
+    "tts",
+    "activeTab",
+    "scripting"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://github.com/*"
+      ],
+      "css": [
+        "src/inject/inject.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://github.com/*"
+      ],
+      "js": [
+        "js/jquery/jquery.min.js",
+        "src/inject/inject.js"
+      ]
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": ["images/*.png"],
+    "matches": ["https://github.com/*"]
+  }]
+}
