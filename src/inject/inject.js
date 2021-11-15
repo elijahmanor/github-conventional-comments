@@ -26,7 +26,7 @@ chrome.runtime.sendMessage({}, function (response) {
                         (l) => `<option value='${l}'>${l}</option>`
                     ).join('')}
                 </select>
-                <input class='' type='text' />
+                <input class='' type='text' placeholder="blocking" />
             `;
             controls.className = 'GitHubConventionalComments-controls';
             const label = controls.querySelector('select');
@@ -44,11 +44,12 @@ chrome.runtime.sendMessage({}, function (response) {
             const trigger = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
             trigger.innerHTML = `
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3.00218 4.5H20.9978C21.2754 4.5 21.5 4.72528 21.5 5V15.8C21.5 16.0761 21.2761 16.3 21 16.3H9.36275C8.901 16.3 8.46498 16.5127 8.18071 16.8765L6.76901 18.6835C6.56883 18.9397 6.18117 18.9397 5.98099 18.6835L4.56929 16.8765C4.28502 16.5127 3.849 16.3 3.38725 16.3H3C2.72386 16.3 2.5 16.0761 2.5 15.8V5C2.5 4.72528 2.72462 4.5 3.00218 4.5Z" stroke="currentColor"/>
+                    <path d="M5.00136 5H18.9986C18.9989 5 18.9991 5 18.9992 5.00001C18.9994 5.00016 18.9997 5.00038 19 5.00066C19 5.00067 19 5.00067 19 5.00068V13.7085H11.9976C11.3708 13.7085 10.7802 14.0024 10.4022 14.5024L8.06345 17.5963L7.6365 15.3371C7.45798 14.3925 6.63263 13.7085 5.67128 13.7085H5V5.00068C5.00001 5.00067 5.00001 5.00067 5.00002 5.00066C5.0003 5.00038 5.00055 5.00016 5.00075 5.00001C5.00093 5 5.00113 5 5.00136 5Z" stroke="currentColor" stroke-width="2"/>
                 </svg>`;
             trigger.className = 'GitHubConventionalComments-trigger';
             trigger.addEventListener('click', () => {
                 controls.classList.toggle('is-open');
+                trigger.classList.toggle('is-open');
                 window.setTimeout(() => {
                     controls.querySelector('select').focus();
                 }, 100);

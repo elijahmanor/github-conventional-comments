@@ -1,18 +1,53 @@
 .GitHubConventionalComments-controls {
   display: none;
+  position: relative;
 }
+
+.GitHubConventionalComments-controls:after {
+  position: absolute;
+  content: '\02EC';
+  display: block;
+  color: #768390;
+  width: 16px;
+  height: 16px;
+  font-size: 32px;
+  line-height: 0;
+  left: calc(50% - 28px);
+}
+
 .GitHubConventionalComments-controls select {
+  flex: 1;
+  margin-right: 16px;
+  display: block;
+  color: #768390;
+  background-color: transparent;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border-color: #444c56;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
+
 .GitHubConventionalComments-controls input {
+  flex: 1;
+  color: #768390;
+  background-color: transparent;
+  padding: 4px 8px;
+  border: 1px solid #444c56;
+  border-radius: 4px;
 }
+
 .GitHubConventionalComments-controls.is-open {
   display: flex;
   margin: 8px;
 }
 
 .GitHubConventionalComments-trigger {
+  cursor: pointer;
   display: flex;
   align-items: center;
+  padding: 4px;
   border: none;
   background: none;
 }
@@ -22,5 +57,11 @@
   fill: transparent;
   width: 24px;
   height: 24px;
+  stroke-width: 2px;
+}
+
+.GitHubConventionalComments-trigger:hover > svg,
+.GitHubConventionalComments-trigger.is-open > svg {
+  color: #539bf5;
 }
 
