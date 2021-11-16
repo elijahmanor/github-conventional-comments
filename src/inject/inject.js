@@ -22,10 +22,11 @@ const createControls = ({ comment }) => {
     const controls = document.createElement('div');
     controls.innerHTML = `
         <select class=''>
-            <option value=''>None</option>
+            <option value=''>No Label</option>
+            <option disabled>--------</option>
             ${LABELS.map((l) => `<option value='${l}'>${l}</option>`).join('')}
         </select>
-        <input class='' type='text' placeholder="blocking" />
+        <input class='' type='text' placeholder="Decorations" />
     `;
     controls.className = 'GitHubConventionalComments-controls';
     const label = controls.querySelector('select');
@@ -69,50 +70,84 @@ const getActiveForm = (e) => {
     const next = tr.nextElementSibling;
     return next;
 };
+const createAndAppend = ({
+    root = document,
+    triggerSelector,
+    controlsSelector,
+    commentSelector,
+}) => {
+    const comment = root.querySelector(commentSelector);
+    const controls = createControls({ comment });
+    const trigger = createTrigger({ comment, controls });
+    root.querySelector(controlsSelector).insertAdjacentElement(
+        'afterend',
+        controls
+    );
+    root.querySelector(triggerSelector).appendChild(trigger);
+};
+const buildConversationView = () =>
+    createAndAppend({
+        triggerSelector:
+            '.js-new-comment-form markdown-toolbar div:nth-child(5)',
+        controlsSelector: '.js-new-comment-form .comment-form-head',
+        commentSelector: '#new_comment_field',
+    });
+const buildFilesChangedView = (e) => {
+    const activeForm = getActiveForm(e);
+    createAndAppend({
+        root: activeForm,
+        triggerSelector: 'markdown-toolbar div:nth-child(6)',
+        controlsSelector: '.comment-form-head',
+        commentSelector: '[name="comment[body]"]',
+    });
+};
+const waitForElement = ({ selector, timeout = Number.POSITIVE_INFINITY }) => {
+    let element = null;
+    let rafId;
+    return new Promise((resolve) => {
+        const stop = (element) => {
+            window.cancelAnimationFrame(rafId);
+            resolve(element);
+        };
+        if (timeout !== Number.POSITIVE_INFINITY) {
+            window.setTimeout(stop, timeout);
+        }
+        (function check() {
+            element = document.querySelector(selector);
+            if (element) {
+                stop(element);
+                return;
+            }
+            rafId = window.requestAnimationFrame(check);
+        })();
+    });
+};
 
 chrome.runtime.sendMessage({}, (response) => {
     var readyStateCheckInterval = setInterval(function () {
         if (document.readyState === 'complete') {
             clearInterval(readyStateCheckInterval);
-
             if (document.querySelector('.js-new-comment-form')) {
-                const comment = document.querySelector('#new_comment_field');
-                const controls = createControls({ comment });
-                const trigger = createTrigger({ comment, controls });
-                document
-                    .querySelector('.js-new-comment-form .comment-form-head')
-                    .insertAdjacentElement('afterend', controls);
-                document
-                    .querySelector(
-                        '.js-new-comment-form markdown-toolbar div:nth-child(5)'
-                    )
-                    .appendChild(trigger);
+                buildConversationView();
             }
-
             document
                 .querySelector('.repository-content')
-                .addEventListener('click', (e) => {
+                .addEventListener('click', async (e) => {
                     if (e.target.closest('.js-add-line-comment')) {
-                        window.setTimeout(() => {
-                            const activeForm = getActiveForm(e);
-                            const comment = activeForm.querySelector(
-                                '[name="comment[body]"]'
-                            );
-                            const controls = createControls({ comment });
-                            const trigger = createTrigger({
-                                comment,
-                                controls,
-                            });
-                            console.log('activeForm', activeForm);
-                            activeForm
-                                .querySelector('.comment-form-head')
-                                .insertAdjacentElement('afterend', controls);
-                            activeForm
-                                .querySelector(
-                                    'markdown-toolbar div:nth-child(6)'
-                                )
-                                .appendChild(trigger);
-                        }, 1);
+                        window.requestAnimationFrame(() => {
+                            buildFilesChangedView(e);
+                        });
+                    }
+                    if (
+                        e.target.closest('.tabnav-tab') &&
+                        /\/pull\/\d+$/.test(e.target.href)
+                    ) {
+                        const element = await waitForElement({
+                            selector: '#new_comment_field',
+                        });
+                        if (element) {
+                            buildConversationView();
+                        }
                     }
                 });
         }
