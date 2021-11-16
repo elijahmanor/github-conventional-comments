@@ -43,6 +43,7 @@
         "https://github.com/*"
       ],
       "js": [
+        "src/inject/helpers.js",
         "src/inject/inject.js"
       ]
     }
