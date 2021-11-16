@@ -1,0 +1,11 @@
+ul {
+	list-style: none;
+}
+
+span {
+	cursor: pointer;
+}
+
+li:not(last-of-type) {
+	margin-bottom: 8px;
+}

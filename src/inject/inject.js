@@ -7,6 +7,7 @@ chrome.storage.sync.get( "labels", function(result) {
 chrome.storage.sync.set( { labels: LABELS } );
 
 chrome.storage.onChanged.addListener( ( changes, area ) => {
+    console.log( "stuff:", changes, area );
     if (area === 'sync' && changes.labels?.newValue) {
         console.log( "inside" );
         LABELS = changes.labels.newValue;
@@ -14,10 +15,10 @@ chrome.storage.onChanged.addListener( ( changes, area ) => {
         const select = controls.querySelector( 'select' );
         const prevSelect = select.value;
         select.innerHTML = `
-            <option value=''>None</option>
-            ${LABELS.map(
-                (l) => `<option value='${l}'>${l}</option>`
-            ).join('')}`;
+            <option value=''>No Label</option>
+            <option disabled>--------</option>
+            ${LABELS.map((l) => `<option value='${l}'>${l}</option>`).join('')}
+        `;
         select.value = prevSelect;
     }
 });

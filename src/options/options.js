@@ -1,30 +1,37 @@
+const LIST = document.querySelector("#list");
 const createList = labels => {
 	const list = document.querySelector( "#list" );
 	list.innerHTML = `${ labels.map( item => {
-		const listItem = `<li id=${ item }>${ item }</li>`;
-		// listItem.addEventListener( "click", e => {
-		// 	console.log( "item click" );
-		// 	e.target.remove();
-		// } );
+		const listItem = `<li id=${ item }><span>&#10005; </span>${ item }</li>`;
 		return listItem;
 	} ).join('') }`;
 };
 
-chrome.storage.sync.get( "labels", function(result) {
-	document.querySelector( "#labels" ).value = result.labels;
-	console.log( "here:", result.labels );
+let localStorage;
+chrome.storage.sync.get( "labels", result => {
+	localStorage = result.labels;
 	createList( result.labels );
 });
 
-const labelArea = document.querySelector( "#labels" );
-labelArea.addEventListener( "blur", () => {
-	// probably need to make this more smarter. :)
-	chrome.storage.sync.set( { labels: labelArea.value.split(",").map( item => item.trim() ) } );
+LIST.addEventListener( 'click', e => {
+	var target = e.target;
+	if (target.tagName.toLowerCase() == "span") {
+		localStorage = localStorage.filter( item => item !== target.closest("li").textContent.split( ` ` )[ 1 ] );
+		target.closest("li").remove();
+		chrome.storage.sync.set( { labels: localStorage } );
+	}
 } );
 
-document.getElementById("list").addEventListener( 'click', e => {
-    var target = e.target;
-    if (target.tagName == "LI") {
-      target.parentNode.removeChild( target );
-    }
-} );
+document.querySelector("button").addEventListener( 'click', e => {
+  var target = e.target;
+  var input = target.closest(".container").querySelector("input");
+  var li = document.createElement("li");
+
+  li.innerHTML = `<span>&#10005; </span>${ input.value }`;
+
+  LIST.appendChild(li);
+  localStorage.push( input.value );
+
+  chrome.storage.sync.set( { labels: localStorage } );
+  input.value = '';
+});
