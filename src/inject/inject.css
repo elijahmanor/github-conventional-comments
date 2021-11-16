@@ -7,7 +7,7 @@
   position: absolute;
   content: '\02EC';
   display: block;
-  color: #768390;
+  color: var(--color-fg-muted);
   width: 16px;
   height: 16px;
   font-size: 32px;
@@ -19,23 +19,37 @@
   flex: 1;
   margin-right: 16px;
   display: block;
-  color: #768390;
-  background-color: transparent;
+  color: var(--color-fg-muted);
+  background-color: var(--color-canvas-inset);
   padding: 4px 8px;
   border-radius: 4px;
-  border-color: #444c56;
+  border-color: var(--color-border-default);
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
 }
 
+.GitHubConventionalComments-controls select:focus {
+  border: 1px solid var(--color-accent-emphasis);
+  outline: none;
+  box-shadow: var(--color-primer-shadow-focus);
+  background-color: var(--color-canvas-default);
+}
+
 .GitHubConventionalComments-controls input {
   flex: 1;
-  color: #768390;
-  background-color: transparent;
+  color: var(--color-fg-muted);
+  background-color: var(--color-canvas-inset);
   padding: 4px 8px;
-  border: 1px solid #444c56;
+  border: 1px solid var(--color-border-default);
   border-radius: 4px;
+}
+
+.GitHubConventionalComments-controls input:focus {
+  border: 1px solid var(--color-accent-emphasis);
+  outline: none;
+  box-shadow: var(--color-primer-shadow-focus);
+  background-color: var(--color-canvas-default);
 }
 
 .GitHubConventionalComments-controls.is-open {
@@ -53,7 +67,7 @@
 }
 
 .GitHubConventionalComments-trigger > svg {
-  color: #768390;
+  color: var(--color-fg-muted);
   fill: transparent;
   width: 24px;
   height: 24px;
@@ -62,6 +76,6 @@
 
 .GitHubConventionalComments-trigger:hover > svg,
 .GitHubConventionalComments-trigger.is-open > svg {
-  color: #539bf5;
+  color: var(--color-accent-fg);
 }
 
