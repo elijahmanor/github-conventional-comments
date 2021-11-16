@@ -8,9 +8,9 @@ const getRawComment = (comment) => {
 };
 const updateComment = (comment, label, decorations) => {
     const rawComment = getRawComment(comment.value);
-    comment.value = `${label}${decorations ? ` (${decorations})` : ''}: ${
+    comment.value = label ? `${label}${decorations ? ` (${decorations})` : ''}: ${
         rawComment || ''
-    }`;
+    }` : rawComment;
 };
 const getLabelAndDecorations = (comment) => {
     const [, label, decorations] = comment.match(/(.*) \((.*)\): (.*)/) || [];
@@ -21,9 +21,7 @@ const createControls = ({ comment }) => {
     controls.innerHTML = `
         <select class=''>
             <option value=''>None</option>
-            ${LABELS.map(
-                (l) => `<option value='${l}'>${l}</option>`
-            ).join('')}
+            ${LABELS.map((l) => `<option value='${l}'>${l}</option>`).join('')}
         </select>
         <input class='' type='text' placeholder="blocking" />
     `;
@@ -66,7 +64,7 @@ const getActiveForm = (e) => {
     const tr = e.target.closest('tr');
     const next = tr.nextElementSibling;
     return next;
-}
+};
 
 chrome.runtime.sendMessage({}, (response) => {
     var readyStateCheckInterval = setInterval(function () {
@@ -91,17 +89,26 @@ chrome.runtime.sendMessage({}, (response) => {
                 .querySelector('.repository-content')
                 .addEventListener('click', (e) => {
                     if (e.target.closest('.js-add-line-comment')) {
-                        window.setTimeout( () => {
+                        window.setTimeout(() => {
                             const activeForm = getActiveForm(e);
-                            const comment = activeForm.querySelector('[name="comment[body]"]');
+                            const comment = activeForm.querySelector(
+                                '[name="comment[body]"]'
+                            );
                             const controls = createControls({ comment });
-                            const trigger = createTrigger({ comment, controls });
-                            console.log("activeForm", activeForm);
-                            activeForm.querySelector('.comment-form-head')
+                            const trigger = createTrigger({
+                                comment,
+                                controls,
+                            });
+                            console.log('activeForm', activeForm);
+                            activeForm
+                                .querySelector('.comment-form-head')
                                 .insertAdjacentElement('afterend', controls);
-                            activeForm.querySelector('markdown-toolbar div:nth-child(6)')
+                            activeForm
+                                .querySelector(
+                                    'markdown-toolbar div:nth-child(6)'
+                                )
                                 .appendChild(trigger);
-                        }, 1 );
+                        }, 1);
                     }
                 });
         }
