@@ -1,19 +1,56 @@
-<!doctype html>
-<style type="text/css">
-	#mainPopup {
-		padding: 10px;
-		height: 150px;
-		width: 400px;
-		font-family: Helvetica, Ubuntu, Arial, sans-serif;
-	}
-	h1 {
-		font-size: 2em;
-	}
-</style>
-
-<div id="mainPopup">
-<h1>Github Conventional Comments</h1>
-<p>This project was developed by a group of individuals at Planview Inc. during a hack-a-thon.</p>
-<div>More more information: <a href="https://www.conventionalcommits.org/en/v1.0.0/" title="conventionalcommits">conventionalcommits</a></div>
-<button id="go-to-options">Go to options</button>
-</div>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>JS Bin</title>
+        <style type="text/css">
+            #mainPopup {
+                padding: 10px;
+                height: 150px;
+                width: 400px;
+                font-family: Helvetica, Ubuntu, Arial, sans-serif;
+		position: relative;
+            }
+            h1 {
+                font-size: 2em;
+            }
+	    #go-to-options {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		text-decoration: none;
+		font-size: 16px;
+	    }
+        </style>
+	<script src="browser_action.js"></script>
+    </head>
+    <body>
+        <div id="mainPopup">
+            <h1>Github Conventional Comments</h1>
+            <p>
+                This project was developed by a group of individuals at Planview
+                Inc. during a hackathon.
+            </p>
+            <ul>
+		<li>
+			<span>Idea behind extension</span>
+			<a
+			    href="https://conventionalcomments.org/"
+			    title="Conventional Comments"
+			    target="_blank"
+			    >Conventional Comments</a>
+		</li>
+		<li>
+			<span>Source code</span>
+			<a
+			    href="https://github.com/elijahmanor/github-conventional-comments"
+			    title="GitHub Conventional Comments"
+			    target="_blank"
+			    >GitHub Conventional Comments</a>
+		</li>
+            </ul>
+            <a id="go-to-options" href="#" title="Options">⚙</button>
+        </div>
+    </body>
+</html>
