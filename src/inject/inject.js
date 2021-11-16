@@ -59,7 +59,7 @@ const createTrigger = ({ comment, controls }) => {
         controls.querySelector('select').value = options.label || '';
         controls.querySelector('input').value = options.decorations || '';
 
-        window.setTimeout(() => {
+        setTimeout(() => {
             controls.querySelector('select').focus();
         }, 100);
     });
@@ -101,16 +101,19 @@ const buildFilesChangedView = (e) => {
         commentSelector: '[name="comment[body]"]',
     });
 };
-const waitForElement = ({ selector, timeout = Number.POSITIVE_INFINITY }) => {
+const waitForElement = (
+    selector,
+    { timeout = Number.POSITIVE_INFINITY } = {}
+) => {
     let element = null;
     let rafId;
     return new Promise((resolve) => {
         const stop = (element) => {
-            window.cancelAnimationFrame(rafId);
+            cancelAnimationFrame(rafId);
             resolve(element);
         };
         if (timeout !== Number.POSITIVE_INFINITY) {
-            window.setTimeout(stop, timeout);
+            setTimeout(stop, timeout);
         }
         (function check() {
             element = document.querySelector(selector);
@@ -118,7 +121,7 @@ const waitForElement = ({ selector, timeout = Number.POSITIVE_INFINITY }) => {
                 stop(element);
                 return;
             }
-            rafId = window.requestAnimationFrame(check);
+            rafId = requestAnimationFrame(check);
         })();
     });
 };
@@ -133,21 +136,16 @@ chrome.runtime.sendMessage({}, (response) => {
             document
                 .querySelector('.repository-content')
                 .addEventListener('click', async (e) => {
-                    if (e.target.closest('.js-add-line-comment')) {
-                        window.requestAnimationFrame(() => {
-                            buildFilesChangedView(e);
-                        });
+                    const target = e.target;
+                    if (target.closest('.js-add-line-comment')) {
+                        requestAnimationFrame(() => buildFilesChangedView(e));
                     }
                     if (
-                        e.target.closest('.tabnav-tab') &&
-                        /\/pull\/\d+$/.test(e.target.href)
+                        target.closest('.tabnav-tab') &&
+                        /\/pull\/\d+$/.test(target.href)
                     ) {
-                        const element = await waitForElement({
-                            selector: '#new_comment_field',
-                        });
-                        if (element) {
+                        (await waitForElement('#new_comment_field')) &&
                             buildConversationView();
-                        }
                     }
                 });
         }
