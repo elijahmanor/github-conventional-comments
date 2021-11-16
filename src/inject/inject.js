@@ -6,8 +6,7 @@ const getRawComment = (comment) => {
     const matches = comment.match(/.*: (.*)/);
     return matches ? matches[1] : comment;
 };
-const updateComment = (label, decorations) => {
-    const comment = document.querySelector('#new_comment_field');
+const updateComment = (comment, label, decorations) => {
     const rawComment = getRawComment(comment.value);
     comment.value = `${label}${decorations ? ` (${decorations})` : ''}: ${
         rawComment || ''
@@ -17,7 +16,7 @@ const getLabelAndDecorations = (comment) => {
     const [, label, decorations] = comment.match(/(.*) \((.*)\): (.*)/) || [];
     return { label, decorations };
 };
-const createControls = () => {
+const createControls = ({ comment }) => {
     const controls = document.createElement('div');
     controls.innerHTML = `
         <select class=''>
@@ -32,14 +31,14 @@ const createControls = () => {
     const label = controls.querySelector('select');
     const decorations = controls.querySelector('input');
     decorations.addEventListener('keyup', (e) => {
-        updateComment(label.value, e.target.value);
+        updateComment(comment, label.value, e.target.value);
     });
     label.addEventListener('change', (e) => {
-        updateComment(e.target.value, decorations.value);
+        updateComment(comment, e.target.value, decorations.value);
     });
     return controls;
 };
-const createTrigger = (controls) => {
+const createTrigger = ({ comment, controls }) => {
     const trigger = document.createElementNS(
         'http://www.w3.org/1999/xhtml',
         'div'
@@ -53,7 +52,6 @@ const createTrigger = (controls) => {
         controls.classList.toggle('is-open');
         trigger.classList.toggle('is-open');
 
-        const comment = document.querySelector('#new_comment_field');
         const options = getLabelAndDecorations(comment.value);
         controls.querySelector('select').value = options.label;
         controls.querySelector('input').value = options.decorations || '';
@@ -64,15 +62,21 @@ const createTrigger = (controls) => {
     });
     return trigger;
 };
+const getActiveForm = (e) => {
+    const tr = e.target.closest('tr');
+    const next = tr.nextElementSibling;
+    return next;
+}
 
 chrome.runtime.sendMessage({}, (response) => {
     var readyStateCheckInterval = setInterval(function () {
         if (document.readyState === 'complete') {
             clearInterval(readyStateCheckInterval);
 
-            const controls = createControls();
-            const trigger = createTrigger(controls);
             if (document.querySelector('.js-new-comment-form')) {
+                const comment = document.querySelector('#new_comment_field');
+                const controls = createControls({ comment });
+                const trigger = createTrigger({ comment, controls });
                 document
                     .querySelector('.js-new-comment-form .comment-form-head')
                     .insertAdjacentElement('afterend', controls);
@@ -83,13 +87,23 @@ chrome.runtime.sendMessage({}, (response) => {
                     .appendChild(trigger);
             }
 
-            jQuery('.repository-content').on(
-                'click',
-                '.js-add-line-comment',
-                () => {
-                    console.log('dynamic click of add-line-comment');
-                }
-            );
+            document
+                .querySelector('.repository-content')
+                .addEventListener('click', (e) => {
+                    if (e.target.closest('.js-add-line-comment')) {
+                        window.setTimeout( () => {
+                            const activeForm = getActiveForm(e);
+                            const comment = activeForm.querySelector('[name="comment[body]"]');
+                            const controls = createControls({ comment });
+                            const trigger = createTrigger({ comment, controls });
+                            console.log("activeForm", activeForm);
+                            activeForm.querySelector('.comment-form-head')
+                                .insertAdjacentElement('afterend', controls);
+                            activeForm.querySelector('markdown-toolbar div:nth-child(6)')
+                                .appendChild(trigger);
+                        }, 1 );
+                    }
+                });
         }
     }, 10);
 });
