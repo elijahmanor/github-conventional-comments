@@ -55,7 +55,7 @@ const createTrigger = ({ comment, controls }) => {
         trigger.classList.toggle('is-open');
 
         const options = getLabelAndDecorations(comment.value);
-        controls.querySelector('select').value = options.label;
+        controls.querySelector('select').value = options.label || '';
         controls.querySelector('input').value = options.decorations || '';
 
         window.setTimeout(() => {
