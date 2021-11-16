@@ -27,7 +27,8 @@
     "storage",
     "tts",
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage"
   ],
   "content_scripts": [
     {
@@ -52,5 +53,5 @@
     "resources": ["images/*.svg"],
     "matches": ["https://github.com/*"]
   }],
-  "options_page": "./src/options.html"
+  "options_page": "./src/options/options.html"
 }
