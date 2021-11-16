@@ -1,10 +1,11 @@
 const DEFAULT_LABELS = ['Praise', 'Nitpick', 'Issue', 'Question', 'Thought', 'Chore'];
-let LABELS;
+let LABELS = DEFAULT_LABELS;
+
 chrome.storage.sync.get( "labels", function(result) {
-    console.log('Value currently is ' + result.labels);
-    LABELS = result.labels || DEFAULT_LABELS;
-});
-chrome.storage.sync.set( { labels: LABELS } );
+	LABELS = result.labels || DEFAULT_LABELS;
+} );
+
+chrome.storage.sync.set( { labels: LABELS } )
 
 chrome.storage.onChanged.addListener( ( changes, area ) => {
     console.log( "stuff:", changes, area );
