@@ -44,5 +44,6 @@
   "web_accessible_resources": [{
     "resources": ["images/*.svg"],
     "matches": ["https://github.com/*"]
-  }]
+  }],
+  "options_page": "./src/options.html"
 }
