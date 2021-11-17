@@ -1,10 +1,10 @@
 const getRawComment = (comment) => {
-	const matches = comment.match(/.*: (.*)/);
+	const matches = comment.match(/.*:\*\* ([^S]*)/);
 	return matches ? matches[1] : comment;
 };
 
 const updateComment = (comment, label, decorations) => {
-	const rawComment = getRawComment(comment.value.replace(/\*/g, '') );
+	const rawComment = getRawComment(comment.value);
 	comment.value = label
 		? `**${label}${decorations ? ` (${decorations})` : ''}:** ${
 				rawComment || ''
@@ -13,7 +13,7 @@ const updateComment = (comment, label, decorations) => {
 };
 
 const getLabelAndDecorations = (comment) => {
-	const [, label, decorations] = comment.match(/(.*) \((.*)\): (.*)/) || [];
+	const [, label, decorations] = comment.match(/^\*\*([^()]*)(?: \((.*)\))?:\*\* (.*)/) || [];
 	return { label, decorations };
 };
 

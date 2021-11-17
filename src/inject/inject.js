@@ -52,8 +52,6 @@ chrome.storage.sync.get('labels', function (result) {
 	}
 });
 
-chrome.storage.sync.set({ labels: LABELS });
-
 chrome.storage.onChanged.addListener((changes, area) => {
 	if (area === 'sync' && changes.labels?.newValue) {
 		LABELS = changes.labels.newValue;
