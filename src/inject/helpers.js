@@ -4,11 +4,11 @@ const getRawComment = (comment) => {
 };
 
 const updateComment = (comment, label, decorations) => {
-	const rawComment = getRawComment(comment.value);
+	const rawComment = getRawComment(comment.value.replace(/\*/g, '') );
 	comment.value = label
-		? `${label}${decorations ? ` (${decorations})` : ''}: ${
+		? `**${label}${decorations ? ` (${decorations})` : ''}:** ${
 				rawComment || ''
-		  }`
+			}`
 		: rawComment;
 };
 
