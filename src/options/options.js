@@ -1,3 +1,11 @@
+const DEFAULT_LABELS = [
+	'chore',
+	'issue',
+	'nitpick',
+	'praise',
+	'question',
+	'thought',
+];
 const LIST_WRAPPER = document.querySelector('.Options-addItemWrapper');
 const LIST = LIST_WRAPPER.querySelector('ul');
 
@@ -24,16 +32,33 @@ LIST.addEventListener('click', (e) => {
 	}
 });
 
-document.querySelector('button').addEventListener('click', (e) => {
+document.querySelector('.options-add').addEventListener('click', (e) => {
 	const target = e.target;
 	const input = target
 		.closest('.Options-actionsWrapper')
 		.querySelector('input');
+	if (!input.value)
+		return;
 	const li = document.createElement('li');
+	li.id = input.value;
 
-	li.innerHTML = `<span>&#10005; </span>${input.value}`;
+	li.innerHTML = `<span>&#10005; </span>${sentenceCase(input.value)}`;
 	LIST.appendChild(li);
 	labelsStore.push(input.value.toLocaleLowerCase());
+	const collator = new Intl.Collator('en', { sensitivity: 'base' });
+	labelsStore.sort(collator.compare);
+	createList(labelsStore);
+	chrome.storage.sync.set({ labels: labelsStore });
+	input.value = '';
+});
+
+document.querySelector('.options-restore').addEventListener('click', (e) => {
+	const target = e.target;
+	const input = target
+		.closest('.Options-actionsWrapper')
+		.querySelector('input');
+
+	labelsStore = [ ...DEFAULT_LABELS ];
 	const collator = new Intl.Collator('en', { sensitivity: 'base' });
 	labelsStore.sort(collator.compare);
 	createList(labelsStore);
