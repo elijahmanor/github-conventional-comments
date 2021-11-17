@@ -2,11 +2,9 @@ const LIST_WRAPPER = document.querySelector( ".Options-addItemWrapper" );
 const LIST = LIST_WRAPPER.querySelector("ul");
 
 const createList = labels => {
-	const list = LIST_WRAPPER.querySelector( "ul" );
-	list.innerHTML = `${ labels.map( item => {
-		const listItem = `<li id=${ item }><span>&#10005; </span>${ item }</li>`;
-		return listItem;
-	} ).join('') }`;
+	LIST.innerHTML = `${ labels.map( item =>
+		`<li id=${ item }><span>&#10005; </span>${ item }</li>`
+	).join('') }`;
 };
 
 let localStorage;
@@ -17,8 +15,8 @@ chrome.storage.sync.get( "labels", result => {
 
 LIST.addEventListener( 'click', e => {
 	var target = e.target;
-	if (target.tagName.toLowerCase() == "span") {
-		localStorage = localStorage.filter( item => item !== target.closest("li").textContent.split( ` ` )[ 1 ] );
+	if (target.closest("span")) {
+		localStorage = localStorage.filter( item => item !== target.closest("li").id );
 		target.closest("li").remove();
 		chrome.storage.sync.set( { labels: localStorage } );
 	}
