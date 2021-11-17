@@ -1,10 +1,10 @@
 const DEFAULT_LABELS = [
-	'Praise',
-	'Nitpick',
-	'Issue',
-	'Question',
-	'Thought',
-	'Chore',
+	'chore',
+	'issue',
+	'nitpick',
+	'praise',
+	'question',
+	'thought',
 ];
 let LABELS = DEFAULT_LABELS;
 
@@ -44,7 +44,9 @@ chrome.storage.sync.get('labels', function (result) {
 		select.innerHTML = `
 			<option value=''>No Label</option>
 			<option disabled>--------</option>
-			${LABELS.map((l) => `<option value='${l}'>${l}</option>`).join('')}
+			${LABELS.map((l) => `<option value='${l}'>${sentenceCase(l)}</option>`).join(
+				''
+			)}
 		`;
 		select.value = prevSelect;
 	}
@@ -63,7 +65,9 @@ chrome.storage.onChanged.addListener((changes, area) => {
 		select.innerHTML = `
             <option value=''>No Label</option>
             <option disabled>--------</option>
-            ${LABELS.map((l) => `<option value='${l}'>${l}</option>`).join('')}
+            ${LABELS.map(
+				(l) => `<option value='${l}'>${sentenceCase(l)}</option>`
+			).join('')}
         `;
 		select.value = prevSelect;
 	}
