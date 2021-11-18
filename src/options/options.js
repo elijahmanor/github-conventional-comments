@@ -4,6 +4,7 @@ const DEFAULT_LABELS = [
 	'nitpick',
 	'praise',
 	'question',
+	'suggestion',
 	'thought',
 ];
 const LIST_WRAPPER = document.querySelector('.Options-addItemWrapper');

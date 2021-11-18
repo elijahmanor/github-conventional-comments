@@ -4,6 +4,7 @@ const DEFAULT_LABELS = [
 	'nitpick',
 	'praise',
 	'question',
+	'suggestion',
 	'thought',
 ];
 let LABELS = DEFAULT_LABELS;
